@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TradeSide {
+  BUY
+  SELL
+}
+
+model User {
+  id           String            @id @default(uuid())
+  name         String
+  email        String            @unique
+  passwordHash String
+  role         Role              @default(USER)
+  createdAt    DateTime          @default(now())
+  lastActiveAt DateTime          @default(now())
+  wallet       Wallet?
+  sessions     Session[]
+  trades       Trade[]
+  orders       TradeOrder[]
+  achievements UserAchievement[]
+  auditLogs    AuditLog[]
+}
+
+model Wallet {
+  userId       String    @id
+  address      String    @unique
+  encryptedKey String
+  readyAt      DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([expiresAt])
+}
+
+model Asset {
+  symbol      String          @id
+  name        String
+  description String
+  address     String          @unique
+  price       Decimal         @db.Decimal(48, 18)
+  min         Decimal         @db.Decimal(48, 18)
+  max         Decimal         @db.Decimal(48, 18)
+  trades      Trade[]
+  snapshots   PriceSnapshot[]
+}
+
+model Trade {
+  id          String    @id @default(uuid())
+  userId      String
+  symbol      String
+  side        TradeSide
+  orderKey    String    @unique
+  quantity    Decimal   @db.Decimal(48, 18)
+  price       Decimal   @db.Decimal(48, 18)
+  total       Decimal   @db.Decimal(48, 18)
+  txHash      String    @unique
+  blockNumber Int
+  executedAt  DateTime
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset       Asset     @relation(fields: [symbol], references: [symbol])
+  @@index([userId, executedAt])
+  @@index([executedAt])
+}
+
+model TradeOrder {
+  key       String    @id
+  userId    String
+  symbol    String
+  side      TradeSide
+  quantity  Decimal   @db.Decimal(48, 18)
+  price     Decimal   @db.Decimal(48, 18)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  code        String            @id
+  title       String
+  description String
+  condition   String
+  target      Int
+  holders     UserAchievement[]
+}
+
+model UserAchievement {
+  userId    String
+  code      String
+  unlockedAt DateTime   @default(now())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Achievement @relation(fields: [code], references: [code])
+  @@id([userId, code])
+}
+
+model PriceSnapshot {
+  id         String   @id @default(uuid())
+  symbol     String
+  price      Decimal  @db.Decimal(48, 18)
+  observedAt DateTime
+  source     String   @unique
+  blockNumber Int?
+  asset      Asset    @relation(fields: [symbol], references: [symbol], onDelete: Cascade)
+  @@index([symbol, observedAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  metadata  Json
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  @@index([createdAt])
+}
+
+model ChainState {
+  id        String @id
+  lastBlock Int
+  paused    Boolean @default(false)
+}

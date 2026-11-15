@@ -1,0 +1,42 @@
+{
+  "name": "@chaintrade/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:generate": "dotenv -e ../../.env -- prisma generate",
+    "db:migrate": "dotenv -e ../../.env -- prisma migrate deploy",
+    "dev": "node --watch --import tsx src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "seed": "node --import tsx src/seed.ts",
+    "test": "vitest run --maxWorkers=1"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.0",
+    "bcrypt": "6.0.0",
+    "cookie-parser": "1.4.7",
+    "cors": "2.8.5",
+    "dotenv": "16.6.1",
+    "ethers": "6.15.0",
+    "express": "5.1.0",
+    "express-rate-limit": "7.5.1",
+    "helmet": "8.1.0",
+    "jsonwebtoken": "9.0.2",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "5.0.2",
+    "@types/cookie-parser": "1.4.9",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/jsonwebtoken": "9.0.10",
+    "@types/node": "22.19.3",
+    "@types/supertest": "6.0.3",
+    "dotenv-cli": "8.0.0",
+    "prisma": "6.19.0",
+    "supertest": "7.1.4",
+    "tsx": "4.21.0",
+    "vitest": "3.2.4"
+  }
+}

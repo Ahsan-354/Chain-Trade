@@ -1,0 +1,29 @@
+{
+  "name": "@chaintrade/web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc && vite build",
+    "test": "node test/flows.cjs"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "5.90.12",
+    "lucide-react": "0.468.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-router-dom": "7.11.0",
+    "recharts": "3.6.0",
+    "@fontsource-variable/inter": "5.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.1.18",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "4.7.0",
+    "playwright": "1.57.0",
+    "tailwindcss": "4.1.18",
+    "vite": "6.4.1"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@chaintrade/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "node": "hardhat node --hostname 127.0.0.1",
+    "deploy": "hardhat run scripts/deploy.cjs --network localhost",
+    "test": "hardhat test",
+    "build": "hardhat compile"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.2.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.8",
+    "chai": "4.5.0",
+    "dotenv": "16.6.1",
+    "ethers": "6.15.0",
+    "hardhat": "2.26.3",
+    "solc": "0.8.28"
+  }
+}

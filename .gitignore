@@ -1,0 +1,9 @@
+node_modules/
+.env
+dist/
+artifacts/
+cache/
+deployment.json
+coverage/
+test-results/
+*.log
